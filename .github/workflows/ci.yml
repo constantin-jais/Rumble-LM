@@ -71,7 +71,11 @@ jobs:
         # cargo-llvm-cov instruments at COMPILE time (no ptrace), so the async WS
         # tests run normally — unlike tarpaulin's Linux ptrace engine which
         # destabilizes them. Runs the gated tests AND enforces >= 80% line
-        # coverage; main.rs (binary composition root) excluded.
+        # coverage; main.rs (binary composition root) excluded. The load test is
+        # skipped here: it is a LATENCY test (its perf assertions are invalid
+        # under coverage instrumentation, which inflates timings ~4x) and its
+        # coverage is redundant with the WS integration tests — the §3 SLOs are
+        # proven locally with `cargo test --release --test load -- --ignored`.
         run: >-
           cargo llvm-cov --workspace --ignore-filename-regex 'main\.rs'
-          --fail-under-lines 80 -- --include-ignored
+          --fail-under-lines 80 -- --include-ignored --skip sustains_200_participants
