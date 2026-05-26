@@ -142,12 +142,12 @@ impl CorpusStore {
     /// so one provider's embeddings define the corpus dimension at insert time.
     pub async fn connect(url: &str) -> Result<Self, CorpusError> {
         let pool = PgPool::connect(url).await?;
-        // A session advisory lock serializes the schema setup: `CREATE EXTENSION`
-        // and `ALTER TABLE` are not concurrency-safe, so two stores connecting at
-        // once (e.g. parallel integration tests) would otherwise race the catalog.
-        sqlx::raw_sql(
-            "SELECT pg_advisory_lock(7392051); \
-             CREATE EXTENSION IF NOT EXISTS vector; \
+        // `CREATE EXTENSION` / `ALTER TABLE` are not concurrency-safe: two stores
+        // setting up the schema at once (parallel integration tests) can hit a
+        // transient catalog conflict (e.g. a duplicate-key on pg_extension). Retry
+        // — on the next pass the winner has committed and the IF-NOT-EXISTS clauses
+        // are no-ops.
+        const SCHEMA: &str = "CREATE EXTENSION IF NOT EXISTS vector; \
              CREATE TABLE IF NOT EXISTS presto_chunks (\
                 space_id          TEXT NOT NULL DEFAULT 'default', \
                 confidentiality   SMALLINT NOT NULL DEFAULT 0, \
@@ -159,11 +159,18 @@ impl CorpusStore {
                 PRIMARY KEY (space_id, document_id, ordinal)); \
              ALTER TABLE presto_chunks \
                 ADD COLUMN IF NOT EXISTS space_id TEXT NOT NULL DEFAULT 'default', \
-                ADD COLUMN IF NOT EXISTS confidentiality SMALLINT NOT NULL DEFAULT 0; \
-             SELECT pg_advisory_unlock(7392051);",
-        )
-        .execute(&pool)
-        .await?;
+                ADD COLUMN IF NOT EXISTS confidentiality SMALLINT NOT NULL DEFAULT 0;";
+        // A duplicate-key here means the racing creator already COMMITTED (MVCC
+        // blocks the index probe until then), so an immediate retry sees the
+        // object as existing and the IF-NOT-EXISTS clause is a no-op.
+        let mut attempt = 0;
+        loop {
+            match sqlx::raw_sql(SCHEMA).execute(&pool).await {
+                Ok(_) => break,
+                Err(_) if attempt < 5 => attempt += 1,
+                Err(e) => return Err(e.into()),
+            }
+        }
         Ok(Self { pool })
     }
 

@@ -9,6 +9,7 @@
 
 pub mod auth;
 pub mod authz;
+pub mod classification;
 pub mod fanout;
 pub mod http;
 pub mod membership;
