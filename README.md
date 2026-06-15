@@ -1,4 +1,4 @@
-# Presto-Matic
+# rumble-lm
 
 > Sovereign, self-hostable collaborative learning platform — **NotebookLM × Kahoot**: AI-generated, source-grounded study content delivered in real-time sessions for 200+ participants.
 
@@ -10,36 +10,38 @@
 
 ## Why it exists
 
-Study platforms either lock you into a vendor's AI stack or lack live collaboration. Presto-Matic is self-hostable with your own AI keys, generates study content grounded in your sources (every item is traceable and agentic-verified), and supports real-time sessions — without compromise on data sovereignty or RGPD compliance.
+Study platforms either lock you into a vendor's AI stack or lack live collaboration. `rumble-lm` is self-hostable with your own AI keys, generates study content grounded in your sources (every item is traceable and agentic-verified), and supports real-time sessions — without compromise on data sovereignty or RGPD compliance.
 
 ## Ecosystem
 
 ```mermaid
 graph TB
-    subgraph product["🎯 Product"]
-        RL["Presto-Matic · rumble-lm<br/>Collaborative Learning App"]
+    subgraph products["🎯 Rumble products"]
+        RL["rumble-lm<br/>Collaborative learning platform"]
+        RC["rumble-cos<br/>Public knowledge site"]
     end
-    subgraph agentic["🤖 Agentic Tools"]
-        cosmatic["cos-matic<br/>Config Compiler + Orchestrator"]
-        DL["wrench-loader<br/>Document Ingestion Worker"]
-        MC["gear-memory<br/>Local Agent Context"]
+    subgraph tools["🛠️ Sovereign tooling"]
+        CM["cos-matic<br/>Agent config + autonomous code-ops"]
+        WL["wrench-loader<br/>Document ingestion worker"]
+        GM["gear-memory<br/>Local agent context"]
     end
-    subgraph devops["🔧 DevOps Tools"]
-        LC["gear-cable<br/>Distribution Substrate"]
-        SD["gear-depot<br/>Registry Proxy / Cache"]
-        VI["vault-inspector<br/>Postgres Security Audit"]
+    subgraph infra["⚙️ Infrastructure"]
+        GC["gear-cable<br/>Distribution substrate"]
+        GD["gear-depot<br/>Registry proxy/cache"]
+        VI["vault-inspector<br/>Postgres security audit"]
     end
     RL --> WL
     RL --> GM
     RL --> VI
     RL --> GD
     RL --> GC
-    cosmatic --> LC
+    RC --> RL
+    CM --> GC
     WL --> GM
     style RL fill:#dbeafe,stroke:#2563eb,stroke-width:2px
 ```
 
-Adjacent tooling lives in separate repos to keep Presto-Matic's runtime boundary tight. See [`docs/adr/0003-companion-repositories.md`](docs/adr/0003-companion-repositories.md).
+Adjacent tooling lives in separate repos to keep rumble-lm's runtime boundary tight. See [`docs/adr/0003-companion-repositories.md`](docs/adr/0003-companion-repositories.md).
 
 ## Key properties
 
@@ -51,7 +53,7 @@ Adjacent tooling lives in separate repos to keep Presto-Matic's runtime boundary
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                     Presto-Matic                        │
+│                        rumble-lm                        │
 ├──────────────┬──────────────────┬───────────────────────┤
 │  crates/core │   crates/rag     │    crates/server      │
 │  Protocol    │  Ingestion ·     │  axum HTTP/WS ·       │

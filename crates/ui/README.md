@@ -1,6 +1,6 @@
 # presto-ui
 
-Mobile-first Dioxus design primitives for Presto-Matic.
+Mobile-first Dioxus design primitives for rumble-lm.
 
 ## Scope
 
