@@ -35,7 +35,7 @@ case of a shared space with a single member** (see SP-A), so solo → shared →
 
 The **wedge is trust**: every generated item passes a grounding-verifier that confirms it is supported
 by its cited source alone — the anti-hallucination gate before content reaches a live session. This
-verifier is also the bridge to the agentic harness (Agent-O-Matic): the harness's "gate" principle
+verifier is also the bridge to the agentic harness (cos-matic): the harness's "gate" principle
 applied to generated content.
 
 Sovereignty is a first-class constraint: BYO keys, Clever Cloud + Clever AI by default, EU residency,

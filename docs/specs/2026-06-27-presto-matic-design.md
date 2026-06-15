@@ -33,7 +33,7 @@ Revisit only after the live-collab wedge is proven.
 
 1. **Grounding-verifier agent** — anti-hallucination gate; every generated item is
    verified as supported by the corpus. This is the **bridge to the agentic harness**
-   (Agent-O-Matic) and the source of educational trust. Most original feature.
+   (cos-matic) and the source of educational trust. Most original feature.
 2. **20+ auto-generated grounded question types** (Wooclap-style, generated from sources).
 3. **Mastery model + personalized SRS follow-up** — in-session knowledge tracing →
    targeted spaced-repetition flashcards per participant.

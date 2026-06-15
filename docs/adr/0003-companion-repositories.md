@@ -17,11 +17,11 @@ Create public companion repositories under `constantin-jais/`, each with a narro
 
 | Companion repo | Upstream inspiration / dependency | Role | Relationship to Presto-Matic |
 | --- | --- | --- | --- |
-| [`memory-card`](https://github.com/constantin-jais/memory-card) | basemind | Local agentic context: code map, repo memory, document/search layer for agents | Dev/operator tool only; never a product runtime dependency |
-| [`disc-loader`](https://github.com/constantin-jais/disc-loader) | Xberg | Rich document ingestion: PDF/Office/OCR/HTML/archives into canonical text + metadata | External ingestion worker/service; integrates by queue/HTTP/object-store contract |
+| [`gear-memory`](https://github.com/constantin-jais/gear-memory) | basemind | Local agentic context: code map, repo memory, document/search layer for agents | Dev/operator tool only; never a product runtime dependency |
+| [`wrench-loader`](https://github.com/constantin-jais/wrench-loader) | Xberg | Rich document ingestion: PDF/Office/OCR/HTML/archives into canonical text + metadata | External ingestion worker/service; integrates by queue/HTTP/object-store contract |
 | [`vault-inspector`](https://github.com/constantin-jais/vault-inspector) | Scythe | SQL audit, schema linting, Postgres/pgvector/RLS/security inspection | CI/security tool consuming SQL/schema artifacts; does not replace `sqlx` |
-| [`supply-depot`](https://github.com/constantin-jais/supply-depot) | Starmetal | Sovereign registry proxy/cache + supply-chain policy POC | Infrastructure POC; not on Presto-Matic's critical production path until promoted |
-| [`link-cable`](https://github.com/constantin-jais/link-cable) | Agent-O-Matic distribution doctrine | Rust-first multi-platform distribution substrate: release manifests, artifact plans, checksums/signatures/provenance, sovereign install floors | External distribution tool; Agent-O-Matic is first consumer, Presto-Matic may later consume release plans/artifacts |
+| [`gear-depot`](https://github.com/constantin-jais/gear-depot) | Starmetal | Sovereign registry proxy/cache + supply-chain policy POC | Infrastructure POC; not on Presto-Matic's critical production path until promoted |
+| [`gear-cable`](https://github.com/constantin-jais/gear-cable) | cos-matic distribution doctrine | Rust-first multi-platform distribution substrate: release manifests, artifact plans, checksums/signatures/provenance, sovereign install floors | External distribution tool; cos-matic is first consumer, Presto-Matic may later consume release plans/artifacts |
 
 Presto-Matic remains the product repo. Companion repos may consume Presto-Matic contracts/artifacts, and Presto-Matic may call their services over stable interfaces, but the product must not gain accidental code dependencies on their internals.
 
@@ -35,11 +35,11 @@ Presto-Matic remains the product repo. Companion repos may consume Presto-Matic 
 
 ## Initial integration posture
 
-- `disc-loader`: first production candidate. It owns Xberg-specific extraction and sends canonical extracted text/metadata back to Presto-Matic for classification, integrity tagging, embedding, and retrieval.
+- `wrench-loader`: first production candidate. It owns Xberg-specific extraction and sends canonical extracted text/metadata back to Presto-Matic for classification, integrity tagging, embedding, and retrieval.
 - `vault-inspector`: CI/security companion. Start with SQL extraction/audit reports, then add live Postgres inspect when a disposable DB is available.
-- `memory-card`: agent/operator acceleration. It can index Presto-Matic and Agent-O-Matic, but it must not become a hidden product requirement.
-- `supply-depot`: lab/infra track. Use it to evaluate registry caching and policy enforcement; keep existing public registries as fallback until the POC is proven.
-- `link-cable`: distribution substrate track. Keep publish/promote mutating commands dry-run or explicitly gated until signatures, SBOM, SLSA provenance, and `compensate` runbooks are proven.
+- `gear-memory`: agent/operator acceleration. It can index Presto-Matic and cos-matic, but it must not become a hidden product requirement.
+- `gear-depot`: lab/infra track. Use it to evaluate registry caching and policy enforcement; keep existing public registries as fallback until the POC is proven.
+- `gear-cable`: distribution substrate track. Keep publish/promote mutating commands dry-run or explicitly gated until signatures, SBOM, SLSA provenance, and `compensate` runbooks are proven.
 
 ## Consequences
 

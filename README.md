@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Rust 1.95+](https://img.shields.io/badge/Rust-1.95%2B-orange.svg)](https://www.rust-lang.org)
-[![CI](https://github.com/constantin-jais/Rumble-LM/actions/workflows/ci.yml/badge.svg)](https://github.com/constantin-jais/Rumble-LM/actions/workflows/ci.yml)
+[![CI](https://github.com/constantin-jais/rumble-lm/actions/workflows/ci.yml/badge.svg)](https://github.com/constantin-jais/rumble-lm/actions/workflows/ci.yml)
 
 > **Status:** `v0.1` — backend/RAG/live-session stable baseline. The live-session tracer bullet is implemented and gated (Biscuit join link, 200 participants, grounded generation, real-time aggregation, leaderboard/load SLOs). Product-complete front, RGPD erasure/audit, and production AI-latency work remain tracked in `docs/`.
 
@@ -20,22 +20,22 @@ graph TB
         RL["Presto-Matic · rumble-lm<br/>Collaborative Learning App"]
     end
     subgraph agentic["🤖 Agentic Tools"]
-        AOM["agent-o-matic<br/>Config Compiler + Orchestrator"]
-        DL["disc-loader<br/>Document Ingestion Worker"]
-        MC["memory-card<br/>Local Agent Context"]
+        cosmatic["cos-matic<br/>Config Compiler + Orchestrator"]
+        DL["wrench-loader<br/>Document Ingestion Worker"]
+        MC["gear-memory<br/>Local Agent Context"]
     end
     subgraph devops["🔧 DevOps Tools"]
-        LC["link-cable<br/>Distribution Substrate"]
-        SD["supply-depot<br/>Registry Proxy / Cache"]
+        LC["gear-cable<br/>Distribution Substrate"]
+        SD["gear-depot<br/>Registry Proxy / Cache"]
         VI["vault-inspector<br/>Postgres Security Audit"]
     end
-    RL --> DL
-    RL --> MC
+    RL --> WL
+    RL --> GM
     RL --> VI
-    RL --> SD
-    RL --> LC
-    AOM --> LC
-    DL --> MC
+    RL --> GD
+    RL --> GC
+    cosmatic --> LC
+    WL --> GM
     style RL fill:#dbeafe,stroke:#2563eb,stroke-width:2px
 ```
 
@@ -95,12 +95,12 @@ See [`docs/`](docs/) for full setup instructions including Clever Cloud deployme
 
 | Repo                                                                  | Role                                                     |
 | --------------------------------------------------------------------- | -------------------------------------------------------- |
-| [disc-loader](https://github.com/constantin-jais/disc-loader)         | Xberg-backed document ingestion worker for RAG           |
-| [memory-card](https://github.com/constantin-jais/memory-card)         | Local agent context layer — code map and repo memory     |
+| [wrench-loader](https://github.com/constantin-jais/wrench-loader)         | Xberg-backed document ingestion worker for RAG           |
+| [gear-memory](https://github.com/constantin-jais/gear-memory)         | Local agent context layer — code map and repo memory     |
 | [vault-inspector](https://github.com/constantin-jais/vault-inspector) | Scythe-backed SQL audit and Postgres security inspection |
-| [supply-depot](https://github.com/constantin-jais/supply-depot)       | Starmetal-backed sovereign registry proxy                |
-| [link-cable](https://github.com/constantin-jais/link-cable)           | Multi-platform distribution substrate                    |
-| [agent-o-matic](https://github.com/constantin-jais/Agent-O-Matic)     | Config compiler and autonomous CI/CD orchestrator        |
+| [gear-depot](https://github.com/constantin-jais/gear-depot)       | Starmetal-backed sovereign registry proxy                |
+| [gear-cable](https://github.com/constantin-jais/gear-cable)           | Multi-platform distribution substrate                    |
+| [cos-matic](https://github.com/constantin-jais/cos-matic)     | Config compiler and autonomous CI/CD orchestrator        |
 
 ## License
 

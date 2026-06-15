@@ -8,7 +8,7 @@
 
 Presto-Matic's next product step after the `v0.1.0` backend/RAG/live-session baseline is a testable mobile-first surface. The product must stay sovereign and self-hostable, avoid app-store friction in the first iteration, and preserve the architectural invariant that product logic lives in Rust rather than being reimplemented in JavaScript/Swift/Kotlin.
 
-Agent-O-Matic's portability doctrine is the reference shape: **one Rust core, bound or compiled to each target, never reimplemented**. For Presto-Matic this means the deterministic product contracts, protocol state, API DTOs, and client-side state machines stay in Rust crates. UI can be target-specific, but it consumes the Rust core.
+cos-matic's portability doctrine is the reference shape: **one Rust core, bound or compiled to each target, never reimplemented**. For Presto-Matic this means the deterministic product contracts, protocol state, API DTOs, and client-side state machines stay in Rust crates. UI can be target-specific, but it consumes the Rust core.
 
 ## Decision
 
@@ -66,7 +66,7 @@ The mobile/WebView work must add gates as the surface appears:
 
 ## Harness feedback loop
 
-Presto-Matic should dogfood Agent-O-Matic's principle: when a repeatable automation/gate belongs to the harness rather than this product, create a GitHub issue in `constantin-jais/Agent-O-Matic` instead of embedding a local workaround.
+Presto-Matic should dogfood cos-matic's principle: when a repeatable automation/gate belongs to the harness rather than this product, create a GitHub issue in `constantin-jais/cos-matic` instead of embedding a local workaround.
 
 A harness issue is required when we identify a generic missing capability such as:
 
@@ -80,9 +80,9 @@ Local Presto work may continue manually, but the missing generic harness capabil
 
 Initial upstream feedback issues created while launching this milestone:
 
-- Agent-O-Matic [#41](https://github.com/constantin-jais/Agent-O-Matic/issues/41) — mobile/WebView Rust-core product domain.
-- Agent-O-Matic [#42](https://github.com/constantin-jais/Agent-O-Matic/issues/42) — reusable `wasm32` portability gate template.
-- Agent-O-Matic [#43](https://github.com/constantin-jais/Agent-O-Matic/issues/43) — milestone/issues scaffold from a plan manifest.
+- cos-matic [#41](https://github.com/constantin-jais/cos-matic/issues/41) — mobile/WebView Rust-core product domain.
+- cos-matic [#42](https://github.com/constantin-jais/cos-matic/issues/42) — reusable `wasm32` portability gate template.
+- cos-matic [#43](https://github.com/constantin-jais/cos-matic/issues/43) — milestone/issues scaffold from a plan manifest.
 
 ## Consequences
 
