@@ -19,7 +19,7 @@ Create public companion repositories under `constantin-jais/`, each with a narro
 | --- | --- | --- | --- |
 | [`gear-memory`](https://github.com/constantin-jais/gear-memory) | basemind | Local agentic context: code map, repo memory, document/search layer for agents | Dev/operator tool only; never a product runtime dependency |
 | [`wrench-loader`](https://github.com/constantin-jais/wrench-loader) | Xberg | Rich document ingestion: PDF/Office/OCR/HTML/archives into canonical text + metadata | External ingestion worker/service; integrates by queue/HTTP/object-store contract |
-| [`vault-inspector`](https://github.com/constantin-jais/vault-inspector) | Scythe | SQL audit, schema linting, Postgres/pgvector/RLS/security inspection | CI/security tool consuming SQL/schema artifacts; does not replace `sqlx` |
+| [`wrench-db-inspect`](https://github.com/constantin-jais/wrench-db-inspect) | Scythe | SQL audit, schema linting, Postgres/pgvector/RLS/security inspection | CI/security tool consuming SQL/schema artifacts; does not replace `wrench-inspect` or `sqlx` |
 | [`gear-depot`](https://github.com/constantin-jais/gear-depot) | Starmetal | Sovereign registry proxy/cache + supply-chain policy POC | Infrastructure POC; not on Presto-Matic's critical production path until promoted |
 | [`gear-cable`](https://github.com/constantin-jais/gear-cable) | cos-matic distribution doctrine | Rust-first multi-platform distribution substrate: release manifests, artifact plans, checksums/signatures/provenance, sovereign install floors | External distribution tool; cos-matic is first consumer, Presto-Matic may later consume release plans/artifacts |
 
@@ -36,7 +36,7 @@ Presto-Matic remains the product repo. Companion repos may consume Presto-Matic 
 ## Initial integration posture
 
 - `wrench-loader`: first production candidate. It owns Xberg-specific extraction and sends canonical extracted text/metadata back to Presto-Matic for classification, integrity tagging, embedding, and retrieval.
-- `vault-inspector`: CI/security companion. Start with SQL extraction/audit reports, then add live Postgres inspect when a disposable DB is available.
+- `wrench-db-inspect`: CI/security companion. Start with SQL extraction/audit reports, then add live Postgres inspect when a disposable DB is available.
 - `gear-memory`: agent/operator acceleration. It can index Presto-Matic and cos-matic, but it must not become a hidden product requirement.
 - `gear-depot`: lab/infra track. Use it to evaluate registry caching and policy enforcement; keep existing public registries as fallback until the POC is proven.
 - `gear-cable`: distribution substrate track. Keep publish/promote mutating commands dry-run or explicitly gated until signatures, SBOM, SLSA provenance, and `compensate` runbooks are proven.
