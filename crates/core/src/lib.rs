@@ -7,4 +7,5 @@
 pub mod api;
 pub mod client;
 pub mod fixtures;
+pub mod p0_contract;
 pub mod protocol;

@@ -14,6 +14,11 @@ use axum::http::{HeaderMap, StatusCode, header};
 use axum::response::{Html, IntoResponse};
 use serde::{Deserialize, Serialize};
 
+use presto_core::p0_contract::{
+    P0StubWorkflowProof, P0ValidationReport, run_p0_stub_workflow, valid_p0_fixture,
+    validate_p0_fixture,
+};
+
 use crate::AppState;
 use crate::auth::Capability;
 use crate::quiz::IngestRejection;
@@ -124,6 +129,65 @@ pub(crate) struct IngestParams {
 pub(crate) struct IngestResult {
     document_id: String,
     chunks_stored: usize,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct P0ContractProof {
+    scope: &'static str,
+    report: P0ValidationReport,
+    boundaries_proved: Vec<&'static str>,
+    execution: P0ContractExecution,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct P0ContractExecution {
+    ui_executed: bool,
+    wrench_called: bool,
+    gear_called: bool,
+    bolt_called: bool,
+    biscuit_runtime_called: bool,
+    llm_provider_called: bool,
+}
+
+/// Contract-only P0 proof endpoint. It validates the core fixture and proves the
+/// server can expose the source-grounded boundary without calling UI, providers,
+/// Wrench, Gear, Bolt, or Biscuit runtimes.
+pub(crate) async fn p0_contract_proof() -> Json<Envelope<P0ContractProof>> {
+    let report = validate_p0_fixture(&valid_p0_fixture());
+    Json(Envelope {
+        data: P0ContractProof {
+            scope: "fixture-only contract proof; no product runtime or external provider called",
+            report,
+            boundaries_proved: vec![
+                "Rumble LM stores source-set refs/snapshots, not source truth.",
+                "Wrench/Gear-shaped source provenance is required before grounding.",
+                "Bolt-shaped generation remains draft-only and cannot publish.",
+                "Validated citations are required for source-derived generated claims.",
+                "Participant-facing exports exclude private responses by default.",
+                "Delegations are scoped, expiring, revocable, and least-privilege.",
+                "Default analytics are aggregate-only with no hidden learner profile.",
+                "Sovereignty filters block mandatory US SaaS, opaque storage, blocking licenses, silent provider fallback, and PII logs.",
+            ],
+            execution: P0ContractExecution {
+                ui_executed: false,
+                wrench_called: false,
+                gear_called: false,
+                bolt_called: false,
+                biscuit_runtime_called: false,
+                llm_provider_called: false,
+            },
+        },
+    })
+}
+
+/// Run the deterministic P0 vertical stub. This remains contract-only: no
+/// persistence, external providers, Wrench/Gear/Bolt calls, or Biscuit runtime.
+pub(crate) async fn p0_stub_run() -> Json<Envelope<P0StubWorkflowProof>> {
+    Json(Envelope {
+        data: run_p0_stub_workflow(),
+    })
 }
 
 /// Constant-time byte comparison for the ingest token (avoids leaking how many

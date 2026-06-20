@@ -79,6 +79,8 @@ pub fn app(state: AppState) -> Router {
         .route("/", get(http::index))
         .route("/app.js", get(http::app_js))
         .route("/health", get(health))
+        .route("/p0/contract/proof", get(http::p0_contract_proof))
+        .route("/p0/stub/run", post(http::p0_stub_run))
         .route("/sessions", post(http::create_session))
         .route(
             "/sessions/{session_id}/participants",
@@ -129,6 +131,63 @@ mod tests {
             .await
             .unwrap()
             .status()
+    }
+
+    #[tokio::test]
+    async fn p0_contract_proof_is_green_and_runtime_free() {
+        let state = AppState::in_memory(Arc::new(Auth::generate()));
+        let response = app(state)
+            .oneshot(
+                Request::builder()
+                    .uri("/p0/contract/proof")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+        let json: serde_json::Value = serde_json::from_slice(&body).unwrap();
+        assert_eq!(json["data"]["report"]["valid"], true);
+        assert_eq!(json["data"]["execution"]["llmProviderCalled"], false);
+        assert_eq!(json["data"]["execution"]["wrenchCalled"], false);
+        assert_eq!(json["data"]["execution"]["gearCalled"], false);
+        assert_eq!(json["data"]["execution"]["boltCalled"], false);
+        assert_eq!(json["data"]["execution"]["biscuitRuntimeCalled"], false);
+    }
+
+    #[tokio::test]
+    async fn p0_stub_run_returns_vertical_steps_without_runtime_calls() {
+        let state = AppState::in_memory(Arc::new(Auth::generate()));
+        let response = app(state)
+            .oneshot(
+                Request::builder()
+                    .method("POST")
+                    .uri("/p0/stub/run")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+        let json: serde_json::Value = serde_json::from_slice(&body).unwrap();
+        assert_eq!(json["data"]["valid"], true);
+        assert_eq!(json["data"]["fixtureValid"], true);
+        assert_eq!(json["data"]["execution"]["durableStorageWritten"], false);
+        assert_eq!(json["data"]["execution"]["llmProviderCalled"], false);
+        let steps = json["data"]["steps"].as_array().unwrap();
+        assert!(steps.iter().any(|step| step["name"] == "attach_sources"));
+        assert!(
+            steps
+                .iter()
+                .any(|step| step["name"] == "export_participant_artifact")
+        );
+        assert!(steps.iter().all(|step| step["ok"] == true));
     }
 
     #[tokio::test]

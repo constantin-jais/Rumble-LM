@@ -36,3 +36,30 @@ The product outcome is not “chat with an LLM”; it is better learning and bet
 ## Product Vision Challenge
 
 `rumble-lm` must be judged by learning outcomes, groundedness, session reliability, and group engagement — not by model novelty.
+
+## P0 Contract Stub
+
+The Rust core contains a contract-only P0 module: `presto_core::p0_contract`.
+
+It validates the source-grounded session boundary before UI/runtime work:
+
+- Rumble owns session workflow and citation review.
+- Wrench/Gear-shaped source refs and provenance are required.
+- Bolt-shaped generation is draft-only and cannot publish.
+- Participant-facing exports exclude private responses by default.
+- Delegations are scoped, expiring, revocable, and least-privilege.
+- Default analytics are aggregate-only; no hidden learner profile.
+
+This module is deliberately pure and stub-shaped. It must not become durable ingestion, memory, orchestration, artifact storage, or authorization infrastructure.
+
+The server exposes two contract/stub endpoints:
+
+```text
+GET  /p0/contract/proof
+POST /p0/stub/run
+```
+
+`GET /p0/contract/proof` validates the core contract.  
+`POST /p0/stub/run` runs the deterministic vertical stub steps: create session, attach source refs, generate draft, validate citations, collect aggregate responses, export participant artifact, and prove delegation bounds.
+
+Both endpoints are fixture-only: they report that no UI, Wrench, Gear, Bolt, Biscuit runtime, durable storage, or LLM provider was called.
